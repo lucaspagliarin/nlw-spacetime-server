@@ -1,16 +1,23 @@
+import 'dotenv/config'
+
 import fastify from 'fastify'
-import { PrismaClient } from '@prisma/client'
+import cors from '@fastify/cors'
+import jwt from '@fastify/jwt'
+import { memoriesRoutes } from './routes/memories'
+import { authRoutes } from './routes/auth'
 
 const app = fastify()
-const prisma = new PrismaClient()
 
-// HTTP Method: GET, POST, PUT, PATCH, DELETE
-
-app.get('/users', async () => {
-  const users = await prisma.user.findMany()
-
-  return users
+app.register(cors, {
+  origin: true, // todas URLs de front-end poderao acessar nosso back-end
 })
+
+app.register(jwt, {
+  secret: 'dk09ak90120kas0dk09sa',
+})
+
+app.register(authRoutes)
+app.register(memoriesRoutes)
 
 app
   .listen({
