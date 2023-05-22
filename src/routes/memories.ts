@@ -5,7 +5,7 @@ import { z } from 'zod'
 export async function memoriesRoutes(app: FastifyInstance) {
   // Verify if the user is LoggedIn
   app.addHook('preHandler', async (request) => {
-    await request.jwtVerify
+    await request.jwtVerify()
   })
 
   // Get all the memories
@@ -24,6 +24,7 @@ export async function memoriesRoutes(app: FastifyInstance) {
         id: memory.id,
         coverUrl: memory.coverUrl,
         excerpt: memory.content.substring(0, 115).concat('...'),
+        createdAt: memory.createdAt,
       }
     })
   })
